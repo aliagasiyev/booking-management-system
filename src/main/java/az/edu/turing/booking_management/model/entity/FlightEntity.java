@@ -34,19 +34,19 @@ public class FlightEntity implements Serializable {
         this.location = location;
     }
 
-    public int getFlight_id() {
+    public int getFlightId() {
         return flight_id;
     }
 
-    public void setFlight_id(int flight_id) {
+    public void setFlightId(int flight_id) {
         this.flight_id = flight_id;
     }
 
-    public int getFreeSpaces() {
+    public int getSeats() {
         return freeSpaces;
     }
 
-    public void setFreeSpaces(int freeSpaces) {
+    public void setSeats(int freeSpaces) {
         this.freeSpaces = freeSpaces;
     }
 
@@ -66,11 +66,11 @@ public class FlightEntity implements Serializable {
         this.destination = destination;
     }
 
-    public LocalDateTime getDeparture_time() {
+    public LocalDateTime getDepartureTime() {
         return departure_time;
     }
 
-    public void setDeparture_time(LocalDateTime departure_time) {
+    public void setDepartureTime(LocalDateTime departure_time) {
         this.departure_time = departure_time;
     }
 

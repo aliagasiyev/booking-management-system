@@ -221,7 +221,6 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
         }
     }
 
-
     @Override
     public Connection getConnection() {
         return JdbcConnect.super.getConnection();

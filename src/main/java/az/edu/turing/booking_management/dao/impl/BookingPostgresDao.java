@@ -7,22 +7,20 @@ import java.sql.*;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class BookingPostgresDao extends BookingDao implements JdbcConnect {
+public class BookingPostgresDao extends BookingDao {
+    Connection connection=new JdbcConnect().getConnection();
 
     @Override
     public boolean save(List<BookingEntity> bookingEntities) {
         String saveIntoBookings = "INSERT INTO bookings (flight_id) VALUES (?)";
         String saveIntoBookingPassenger = "INSERT INTO booking_passenger (booking_id, passenger_id) VALUES (?, ?)";
         String saveIntoPassengers = "INSERT INTO passengers (name) VALUES (?)";
-        Connection conn = null;
-
         try {
-            conn = getConnection();
-            conn.setAutoCommit(false);
+            connection.setAutoCommit(false);
 
-            try (PreparedStatement statementForBookings = conn.prepareStatement(saveIntoBookings, Statement.RETURN_GENERATED_KEYS);
-                 PreparedStatement statementForBookingPassenger = conn.prepareStatement(saveIntoBookingPassenger);
-                 PreparedStatement statementForPassengers = conn.prepareStatement(saveIntoPassengers, Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement statementForBookings = connection.prepareStatement(saveIntoBookings, Statement.RETURN_GENERATED_KEYS);
+                 PreparedStatement statementForBookingPassenger = connection.prepareStatement(saveIntoBookingPassenger);
+                 PreparedStatement statementForPassengers = connection.prepareStatement(saveIntoPassengers, Statement.RETURN_GENERATED_KEYS)) {
 
                 for (BookingEntity bookingEntity : bookingEntities) {
                     statementForBookings.setLong(1, bookingEntity.getFlightId());
@@ -53,10 +51,10 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
                 }
 
                 statementForBookingPassenger.executeBatch();
-                conn.commit();
+                connection.commit();
                 return true;
             } catch (SQLException e) {
-                conn.rollback();
+                connection.rollback();
                 e.printStackTrace();
                 return false;
             }
@@ -64,10 +62,10 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
             e.printStackTrace();
             return false;
         } finally {
-            if (conn != null) {
+            if (connection != null) {
                 try {
-                    conn.setAutoCommit(true);
-                    conn.close();
+                    connection.setAutoCommit(true);
+                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -83,8 +81,7 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
                 "JOIN booking_passenger ON bookings.id = booking_passenger.booking_id " +
                 "JOIN passengers ON booking_passenger.passenger_id = passengers.id";
         List<BookingEntity> bookingEntities = new ArrayList<>();
-        try (Connection conn = getConnection()) {
-            PreparedStatement query = conn.prepareStatement(getAll);
+        try (PreparedStatement query = connection.prepareStatement(getAll)) {
             ResultSet resultSet = query.executeQuery();
 
             Map<Long, BookingEntity> bookingMap = new HashMap<>();
@@ -114,10 +111,8 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
                 "FROM bookings " +
                 "JOIN booking_passenger ON bookings.id = booking_passenger.booking_id " +
                 "JOIN passengers ON booking_passenger.passenger_id = passengers.id";
-        try (Connection conn = getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getOneBySql);
+        try (PreparedStatement statement = connection.prepareStatement(getOneBySql)) {
             ResultSet resultSet = statement.executeQuery();
-
             Map<Long, BookingEntity> bookingMap = new HashMap<>();
             long currentBookingId = -1;
             while (resultSet.next()) {
@@ -159,8 +154,7 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
                 "JOIN booking_passenger ON bookings.id = booking_passenger.booking_id " +
                 "JOIN passengers ON booking_passenger.passenger_id = passengers.id";
         List<BookingEntity> bookingEntities = new ArrayList<>();
-        try (Connection conn = getConnection()) {
-            PreparedStatement statement = conn.prepareStatement(getAllBySql);
+        try (PreparedStatement statement = connection.prepareStatement(getAllBySql)) {
             ResultSet resultSet = statement.executeQuery();
 
             Map<Long, BookingEntity> bookingMap = new HashMap<>();
@@ -204,15 +198,15 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
 
     @Override
     public void delete(long id) {
-        try (Connection conn = getConnection()) {
+        try  {
             String deleteBookingPassengerSql = "DELETE FROM booking_passenger WHERE booking_id = ?";
-            try (PreparedStatement statement = conn.prepareStatement(deleteBookingPassengerSql)) {
+            try (PreparedStatement statement = connection.prepareStatement(deleteBookingPassengerSql)) {
                 statement.setLong(1, id);
                 statement.executeUpdate();
             }
 
             String deleteBookingSql = "DELETE FROM bookings WHERE id = ?";
-            try (PreparedStatement statement = conn.prepareStatement(deleteBookingSql)) {
+            try (PreparedStatement statement = connection.prepareStatement(deleteBookingSql)) {
                 statement.setLong(1, id);
                 statement.executeUpdate();
             }
@@ -220,17 +214,9 @@ public class BookingPostgresDao extends BookingDao implements JdbcConnect {
             e.printStackTrace();
         }
     }
-
-
-    @Override
-    public Connection getConnection() {
-        return JdbcConnect.super.getConnection();
-    }
-
     public long getNextBookingId() throws SQLException {
         String getNextIdSql = "SELECT nextval('bookings_id_seq')";
-        try (Connection conn = getConnection();
-             PreparedStatement statement = conn.prepareStatement(getNextIdSql);
+        try (PreparedStatement statement = connection.prepareStatement(getNextIdSql);
              ResultSet resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
                 return resultSet.getLong(1);

@@ -15,7 +15,7 @@ public class FlightPostgresDao extends FlightDao {
 
     @Override
     public boolean save(List<FlightEntity> flightEntities) {
-        final String flightsave = "INSERT INTO flights(departure_time,freeSpaces,destination,location) VALUES (?,?,?,?)";
+        final String flightsave = "INSERT INTO flights(date_and_time,seats,destination,location) VALUES (?,?,?,?)";
         try (PreparedStatement statementflight = connection.prepareStatement(flightsave)) {
             for (FlightEntity flightsEntity : flightEntities) {
                 statementflight.setTimestamp(1, Timestamp.valueOf(flightsEntity.getDepartureTime()));
@@ -34,8 +34,8 @@ public class FlightPostgresDao extends FlightDao {
 
     @Override
     public void update(long flightId, int seats) {
-        String getSeatsSql = "SELECT freeSpaces FROM flights WHERE id = ?";
-        String updateSql = "UPDATE flights SET freeSpaces = ? WHERE id = ?";
+        String getSeatsSql = "SELECT seats FROM flights WHERE id = ?";
+        String updateSql = "UPDATE flights SET seats = ? WHERE id = ?";
         try {
             connection.setAutoCommit(false);
             int currentSeats;
@@ -95,9 +95,9 @@ public class FlightPostgresDao extends FlightDao {
             while (resultSet.next()) {
                 FlightEntity flightEntity = new FlightEntity(
                         resultSet.getInt("id"),
-                        resultSet.getInt("free_seats"),
-                        resultSet.getTimestamp("departure_time").toLocalDateTime(),
-                        resultSet.getString("origin"),
+                        resultSet.getInt("seats"),
+                        resultSet.getTimestamp("date_and_time").toLocalDateTime(),
+                        resultSet.getString("location"),
                         resultSet.getString("destination"));
                 flightEntities.add(flightEntity);
             }
@@ -114,8 +114,8 @@ public class FlightPostgresDao extends FlightDao {
             while (resultSet.next()) {
                 FlightEntity flightEntity = new FlightEntity(
                         resultSet.getInt("id"),
-                        resultSet.getInt("freeSpaces"),
-                        resultSet.getTimestamp("departure_time").toLocalDateTime(),
+                        resultSet.getInt("seats"),
+                        resultSet.getTimestamp("date_and_time").toLocalDateTime(),
                         resultSet.getString("location"),
                         resultSet.getString("destination"));
                 if (predicate.test(flightEntity)) {
@@ -137,8 +137,8 @@ public class FlightPostgresDao extends FlightDao {
             while (resultSet.next()) {
                 FlightEntity flightEntity = new FlightEntity(
                         resultSet.getInt("id"),
-                        resultSet.getInt("freeSpaces"),
-                        resultSet.getTimestamp("departure_time").toLocalDateTime(),
+                        resultSet.getInt("seats"),
+                        resultSet.getTimestamp("date_and_time").toLocalDateTime(),
                         resultSet.getString("location"),
                         resultSet.getString("destination"));
                 if (predicate.test(flightEntity)) {

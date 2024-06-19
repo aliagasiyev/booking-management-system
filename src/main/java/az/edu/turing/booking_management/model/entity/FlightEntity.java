@@ -34,11 +34,12 @@ public class FlightEntity implements Serializable {
         this.freeSpaces = freeSpaces;
     }
 
-    public FlightEntity(int id, int freeSeats, LocalDateTime departureTime, String origin, String destination) {
+    public FlightEntity(int id, int freeSeats, LocalDateTime departureTime, String location, String destination) {
         this.flight_id = id;
         this.freeSpaces = freeSeats;
         this.departure_time = departureTime;
         this.destination = destination;
+        this.location = location;
     }
 
 

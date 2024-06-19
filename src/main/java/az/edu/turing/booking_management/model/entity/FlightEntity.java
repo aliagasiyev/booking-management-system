@@ -18,7 +18,6 @@ public class FlightEntity implements Serializable {
     public FlightEntity() {
 
     }
-
     public FlightEntity(int flight_id, int freeSpaces, String location,String destination, LocalDateTime departure_time) {
         this.flight_id = flight_id;
         this.freeSpaces = freeSpaces;
@@ -28,11 +27,20 @@ public class FlightEntity implements Serializable {
         nextId++;
     }
 
-    public FlightEntity(int flight_id, int freeSpaces, String location) {
-        this.flight_id = flight_id;
-        this.freeSpaces = freeSpaces;
+    public FlightEntity(LocalDateTime departureTime, String location, String destination, int freeSpaces) {
+        this.departure_time = departureTime;
         this.location = location;
+        this.destination = destination;
+        this.freeSpaces = freeSpaces;
     }
+
+    public FlightEntity(int id, int freeSeats, LocalDateTime departureTime, String origin, String destination) {
+        this.flight_id = id;
+        this.freeSpaces = freeSeats;
+        this.departure_time = departureTime;
+        this.destination = destination;
+    }
+
 
     public int getFlightId() {
         return flight_id;

@@ -9,7 +9,7 @@ public interface FlightService {
 
    List<FlightDto> getAllFlights();
 
-   List<FlightDto> getAllFlightIn24Hours();
+   List<FlightDto> getAllFlightIn24Hours(String location);
 
    Optional<FlightDto> getFlightById(long flightId);
 

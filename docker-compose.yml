@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres-db:
-    image: postgres:latest`
+    image: postgres:latest
     container_name: postgres-booking
     environment:
       POSTGRES_USER: postgres

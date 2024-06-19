@@ -1,13 +1,9 @@
 package az.edu.turing.booking_management.model.entity;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class FlightEntity implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class FlightEntity {
     private int flight_id;
     private int freeSpaces;
     private String location;

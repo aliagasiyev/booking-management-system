@@ -5,9 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JdbcConnect {
-    public Connection getConnection() {
+    final String url = "jdbc:postgresql://localhost:5432/postgres";
+    final String user = "postgres";
+    final String password = "postgres";
+
+    public  Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "postgres");
+            return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;

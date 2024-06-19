@@ -33,13 +33,13 @@ public class BookingManagementApp {
     private static final DatabaseUtils databaseUtils = new DatabaseUtils();
 
     public static void main(String[] args) {
-        databaseUtils.resetAll();
+       databaseUtils.resetAll();
         FlightDto flight1 = new FlightDto(
-                LocalDateTime.of(2024, 6, 3, 10, 30), "Kiev", "Baku", 15);
+                LocalDateTime.of(2024, 6, 20, 1, 30), "Kiev", "Baku", 15);
         FlightDto flight2 = new FlightDto(
-                LocalDateTime.of(2024, 6, 3, 8, 30), "Kiev", "Salyan", 13);
+                LocalDateTime.of(2024, 6, 20, 2, 30), "Kiev", "Salyan", 13);
         FlightDto flight3 = new FlightDto(
-                LocalDateTime.of(2024, 6, 3, 7, 30), "London", "Bilasuvar republic", 2);
+                LocalDateTime.of(2024, 6, 20, 3, 30), "London", "Bilasuvar republic", 2);
         flightController.createFlight(flight1);
         flightController.createFlight(flight2);
         flightController.createFlight(flight3);

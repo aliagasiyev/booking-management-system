@@ -65,7 +65,6 @@ public class BookingPostgresDao extends BookingDao {
             if (connection != null) {
                 try {
                     connection.setAutoCommit(true);
-                    connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

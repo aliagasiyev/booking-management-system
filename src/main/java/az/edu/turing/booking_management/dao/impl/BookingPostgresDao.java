@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class BookingPostgresDao extends BookingDao {
-    Connection connection=new JdbcConnect().getConnection();
+    Connection connection = new JdbcConnect().getConnection();
 
     @Override
     public boolean save(List<BookingEntity> bookingEntities) {

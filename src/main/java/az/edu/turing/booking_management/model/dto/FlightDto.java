@@ -24,6 +24,13 @@ public class FlightDto {
         this.location = location;
     }
 
+    public FlightDto (LocalDateTime departure_time, String location, String destination, int freeSpaces){
+        this.departure_time = departure_time;
+        this.location = location;
+        this.destination = destination;
+        this.freeSpaces = freeSpaces;
+    }
+
     public int getFlight_id() {
         return flight_id;
     }

@@ -16,10 +16,7 @@ import az.edu.turing.booking_management.util.DatabaseUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Scanner;
 
 public class BookingManagementApp {
     private static final BookingDao bookingDao = new BookingPostgresDao();
@@ -27,7 +24,6 @@ public class BookingManagementApp {
     private static final FlightService flightService = new FlightServiceImpl(flightDao);
     private static final FlightController flightController = new FlightController(flightService);
     private static final BookingService bookingService = new BookingServiceImpl(bookingDao, flightDao);
-    private static final BookingController bookingController = new BookingController(bookingService);
     private static final DatabaseUtils databaseUtils = new DatabaseUtils();
 
     public static void main(String[] args) throws Exception {
@@ -39,8 +35,7 @@ public class BookingManagementApp {
         handler.setContextPath("/");
         server.setHandler(handler);
 
-        // Pass the controllers to the servlets
-        handler.addServlet(new ServletHolder(new BookingServlet(bookingService)), "/bookings/*");
+        handler.addServlet(new ServletHolder(new BookingServlet()), "/bookings/*");
         server.start();
         server.join();
     }
@@ -49,9 +44,9 @@ public class BookingManagementApp {
         FlightDto flight1 = new FlightDto(LocalDateTime.of(2024, 6, 20, 1, 30), "Kiev", "Baku", 15);
         FlightDto flight2 = new FlightDto(LocalDateTime.of(2024, 6, 20, 2, 30), "Kiev", "Salyan", 13);
         FlightDto flight3 = new FlightDto(LocalDateTime.of(2024, 6, 20, 3, 30), "London", "Bilasuvar republic", 2);
+
         flightController.createFlight(flight1);
         flightController.createFlight(flight2);
         flightController.createFlight(flight3);
     }
 }
-

@@ -15,7 +15,6 @@ public class FlightController {
     }
 
     public Optional<FlightDto> getFlightById(long id) {
-        id = 5;
         return flightService.getFlightById(id);
     }
 

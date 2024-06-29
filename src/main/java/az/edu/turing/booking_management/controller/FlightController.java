@@ -15,18 +15,18 @@ public class FlightController {
     }
 
     public Optional<FlightDto> getFlightById(long id) {
+        id = 5;
         return flightService.getFlightById(id);
     }
 
     public List<FlightDto> getFlightsByLocationIn24Hours(String location) {
+
         return flightService.getAllFlightIn24Hours(location);
     }
 
     public boolean createFlight(FlightDto flightDto) {
+
         return flightService.createFlight(flightDto);
     }
 
-    public List<FlightDto> getAllFlights() {
-        return flightService.getAllFlights();
-    }
 }

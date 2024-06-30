@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 public class BookingServlet extends HttpServlet {
@@ -15,21 +14,21 @@ public class BookingServlet extends HttpServlet {
     BookingDao bookingDao = new BookingPostgresDao();
     public BookingServlet() {
           BookingService bookingService = new BookingServiceImpl(bookingDao);
-        ObjectMapper objectMapper = new ObjectMapper(); // ObjectMapper for JSON handling
+        ObjectMapper objectMapper = new ObjectMapper();
         this.bookingServiceHandler = new BookingServiceHandler(bookingService, objectMapper);
     }
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        bookingServiceHandler.handleCreateBooking(req, resp);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        bookingServiceHandler.handleCreateBooking(request, response);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        bookingServiceHandler.handleCancelBooking(req, resp);
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        bookingServiceHandler.handleCancelBooking(request, response);
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        bookingServiceHandler.handleGetReservations(req, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        bookingServiceHandler.handleGetReservations(request, response);
     }
 }

@@ -1,4 +1,5 @@
 package az.edu.turing.booking_management.controller;
+
 import az.edu.turing.booking_management.exception.NoEnoughSeatsException;
 import az.edu.turing.booking_management.exception.NoSuchReservationException;
 import az.edu.turing.booking_management.exception.NotAValidFlightException;
@@ -20,45 +21,50 @@ public class BookingServiceHandler {
         this.objectMapper = objectMapper;
     }
 
-    public void handleCreateBooking(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void handleCreateBooking(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            BookingEntity bookingEntity = objectMapper.readValue(req.getReader(), BookingEntity.class);
+            BookingEntity bookingEntity = objectMapper.readValue(request.getReader(), BookingEntity.class);
             boolean bookingSuccess = bookingService.bookAReservation(bookingEntity.getPassengers(), bookingEntity.getFlightId());
             if (bookingSuccess) {
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().write("Booking successful");
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.getWriter().write("Booking Successful...");
             } else {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Booking failed");
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Booking Failed");
             }
         } catch (NoEnoughSeatsException | NotAValidFlightException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad request is here");
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong please try again");
         }
     }
 
-    public void handleCancelBooking(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void handleCancelBooking(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            long bookingId = Long.parseLong(req.getParameter("bookingId"));
+            long bookingId = Long.parseLong(request.getParameter("bookingId"));
             bookingService.cancelAReservation(bookingId);
-            resp.getWriter().write("Cancellation successful");
-        } catch (NoSuchReservationException e) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT); //successful
+            response.getWriter().write("Booking successful canceled");
+        }catch (NoSuchReservationException e) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
         }
     }
-
-    public void handleGetReservations(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public void handleGetReservations(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            String passengerName = req.getParameter("name");
+            String passengerName = request.getParameter("name");
             List<BookingEntity> reservations = bookingService.getMyReservations(passengerName);
-            resp.setContentType("application/json");
-            resp.getWriter().write(objectMapper.writeValueAsString(reservations));
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write(objectMapper.writeValueAsString(reservations));
+
+
         } catch (NoSuchReservationException e) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+
         } catch (Exception e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
         }
     }
 }

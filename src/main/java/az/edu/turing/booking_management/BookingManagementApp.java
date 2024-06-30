@@ -35,11 +35,10 @@ public class BookingManagementApp {
         handler.setContextPath("/");
         server.setHandler(handler);
 
-        handler.addServlet(new ServletHolder(new BookingServlet()), "/bookings/*");
+        handler.addServlet(new ServletHolder(   new BookingServlet()), "/bookings/*");
         server.start();
         server.join();
     }
-
     private static void createSampleFlights() {
         FlightDto flight1 = new FlightDto(LocalDateTime.of(2024, 6, 20, 1, 30), "Kiev", "Baku", 15);
         FlightDto flight2 = new FlightDto(LocalDateTime.of(2024, 6, 20, 2, 30), "Kiev", "Salyan", 13);

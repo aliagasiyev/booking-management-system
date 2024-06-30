@@ -21,10 +21,10 @@ public class FlightServiceHandler {
 
     public void handleGetFlightById(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            resp.setContentType("application/json");
             long id = Long.parseLong(req.getParameter("id"));
             Optional<FlightDto> flight = flightService.getFlightById(id);
             if (flight.isPresent()) {
-                resp.setContentType("application/json");
                 resp.getWriter().write(objectMapper.writeValueAsString(flight.get()));
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Flight not found");
@@ -36,9 +36,9 @@ public class FlightServiceHandler {
 
     public void handleGetFlightsByLocationIn24Hours(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            resp.setContentType("application/json");
             String location = req.getParameter("location");
             List<FlightDto> flights = flightService.getAllFlightIn24Hours(location);
-            resp.setContentType("application/json");
             resp.getWriter().write(objectMapper.writeValueAsString(flights));
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong! Try again!");
@@ -47,6 +47,7 @@ public class FlightServiceHandler {
 
     public void handleCreateFlight(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
+            resp.setContentType("application/json");
             FlightDto flightDto = objectMapper.readValue(req.getReader(), FlightDto.class);
             boolean creationSuccess = flightService.createFlight(flightDto);
             if (creationSuccess) {

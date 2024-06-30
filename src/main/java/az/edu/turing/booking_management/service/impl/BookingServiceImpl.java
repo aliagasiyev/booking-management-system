@@ -31,7 +31,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public boolean bookAReservation(String[] passengers, long flightId) throws NotAValidFlightException, NoEnoughSeatsException {
+    public boolean bookAReservation(String[] passengers, long flightId, BookingDao bookingDao, FlightDao flightDao) throws NotAValidFlightException, NoEnoughSeatsException {
         List<BookingEntity> list = new ArrayList<>();
         List<FlightEntity> flightsList = flightDao.getAll();
         int amount = passengers.length;
@@ -65,16 +65,18 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void cancelAReservation(long bookingId) throws NoSuchReservationException {
+    public boolean cancelAReservation(long bookingId, BookingDao bookingDao, FlightDao flightDao) throws NoSuchReservationException {
         try {
             BookingEntity reservationEntity = bookingDao.getOneBy(bookingEntity -> bookingEntity.getBookingId() == bookingId).get();
             int amount = reservationEntity.getPassengers().length;
             long flightId = reservationEntity.getFlightId();
             bookingDao.delete(bookingId);
             flightDao.update(flightId, amount);
+            return true;
         } catch (NoSuchReservationException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override

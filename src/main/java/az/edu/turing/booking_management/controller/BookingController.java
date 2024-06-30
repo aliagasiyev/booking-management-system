@@ -1,5 +1,7 @@
 package az.edu.turing.booking_management.controller;
 
+import az.edu.turing.booking_management.dao.BookingDao;
+import az.edu.turing.booking_management.dao.FlightDao;
 import az.edu.turing.booking_management.model.entity.BookingEntity;
 import az.edu.turing.booking_management.service.BookingService;
 
@@ -12,12 +14,12 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    public boolean bookAReservation(String [] passangers, long flightId) {
-        return bookingService.bookAReservation(passangers, flightId);
+    public boolean bookAReservation(String [] passangers, long flightId, BookingDao bookingDao, FlightDao flightDao) {
+        return bookingService.bookAReservation(passangers, flightId, bookingDao, flightDao);
     }
 
-    public void cancelAReservation(long bookingId) {
-        bookingService.cancelAReservation(bookingId);
+    public void cancelAReservation(long bookingId, BookingDao bookingDao, FlightDao flightDao) {
+        bookingService.cancelAReservation(bookingId, bookingDao, flightDao);
     }
 
     public List<BookingEntity> getMyReservations(String passengerName) {

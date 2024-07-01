@@ -18,18 +18,17 @@ public class FlightDto {
         this.departure_time = departure_time;
     }
 
-    public FlightDto(int flight_id, int freeSpaces, String location) {
-        this.flight_id = flight_id;
-        this.freeSpaces = freeSpaces;
-        this.location = location;
-    }
 
-    public FlightDto (LocalDateTime departure_time, String location, String destination, int freeSpaces){
+    public FlightDto(LocalDateTime departure_time, String location, String destination, int freeSpaces) {
         this.departure_time = departure_time;
         this.location = location;
         this.destination = destination;
         this.freeSpaces = freeSpaces;
     }
+
+    public FlightDto() {
+    }
+
 
     public int getFlight_id() {
         return flight_id;

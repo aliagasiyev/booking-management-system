@@ -71,7 +71,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public boolean createFlight(FlightDto flightDto) {
+    public boolean createFlight(FlightDto flightDto,FlightDao flightDao) {
         Predicate<FlightEntity> flightPredicate = flightEntity ->
                 flightEntity.getDepartureTime().equals(flightDto.getDeparture_time()) &&
                         flightEntity.getLocation().equals(flightDto.getLocation()) &&
@@ -81,7 +81,6 @@ public class FlightServiceImpl implements FlightService {
         if (existingFlight.isPresent()) {
             return false;
         }
-
         FlightEntity flightEntity = new FlightEntity(
                 flightDto.getDeparture_time(),
                 flightDto.getLocation(),

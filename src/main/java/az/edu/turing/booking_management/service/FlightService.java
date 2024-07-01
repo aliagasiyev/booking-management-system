@@ -1,5 +1,6 @@
 package az.edu.turing.booking_management.service;
 
+import az.edu.turing.booking_management.dao.FlightDao;
 import az.edu.turing.booking_management.model.dto.FlightDto;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface FlightService {
 
    Optional<FlightDto> getFlightById(long flightId);
 
-   boolean createFlight(FlightDto flightDto);
+   boolean createFlight(FlightDto flightDto, FlightDao flightDao);
 }

@@ -12,6 +12,7 @@ import java.io.IOException;
 public class BookingServlet extends HttpServlet {
     private final BookingServiceHandler bookingServiceHandler;
     BookingDao bookingDao = new BookingPostgresDao();
+
     public BookingServlet() {
           BookingService bookingService = new BookingServiceImpl(bookingDao);
         ObjectMapper objectMapper = new ObjectMapper();

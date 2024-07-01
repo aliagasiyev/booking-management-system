@@ -1,5 +1,6 @@
 package az.edu.turing.booking_management.controller;
 
+import az.edu.turing.booking_management.dao.FlightDao;
 import az.edu.turing.booking_management.model.dto.FlightDto;
 import az.edu.turing.booking_management.service.FlightService;
 
@@ -23,9 +24,9 @@ public class FlightController {
         return flightService.getAllFlightIn24Hours(location);
     }
 
-    public boolean createFlight(FlightDto flightDto) {
+    public boolean createFlight(FlightDto flightDto, FlightDao flightDao) {
 
-        return flightService.createFlight(flightDto);
+        return flightService.createFlight(flightDto,flightDao);
     }
 
 }

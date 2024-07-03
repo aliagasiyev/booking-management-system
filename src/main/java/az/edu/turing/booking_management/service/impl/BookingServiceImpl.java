@@ -18,8 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookingServiceImpl implements BookingService {
-    private  BookingDao bookingDao;
-    private  FlightDao flightDao;
+    private BookingDao bookingDao;
+    private FlightDao flightDao;
 
     public BookingServiceImpl(BookingDao bookingDao, FlightDao flightDao) {
         this.bookingDao = bookingDao;

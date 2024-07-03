@@ -30,6 +30,10 @@ public class BookingServiceImpl implements BookingService {
         this.bookingDao = bookingDao;
     }
 
+    public BookingServiceImpl() {
+
+    }
+
     @Override
     public boolean bookAReservation(String[] passengers, long flightId, BookingDao bookingDao, FlightDao flightDao) throws NotAValidFlightException, NoEnoughSeatsException {
         List<BookingEntity> list = new ArrayList<>();

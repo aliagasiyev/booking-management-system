@@ -22,7 +22,6 @@ public class BookingCreateServlet extends HttpServlet {
     private BookingService bookingService;
 
     public BookingCreateServlet() {
-        // Başlatma burada yapılmıyor, init metodunda yapılacak
     }
 
     public BookingCreateServlet(ObjectMapper objectMapper, BookingService bookingService) {
@@ -37,7 +36,6 @@ public class BookingCreateServlet extends HttpServlet {
             this.objectMapper = new ObjectMapper();
         }
         if (this.bookingService == null) {
-            // BookingService'in somut bir implementasyonu ile başlatılması
             this.bookingService = new BookingServiceImpl();
         }
     }

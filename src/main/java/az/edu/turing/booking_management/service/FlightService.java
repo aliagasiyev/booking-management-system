@@ -14,5 +14,4 @@ public interface FlightService {
 
    Optional<FlightDto> getFlightById(long flightId);
 
-   boolean createFlight(FlightDto flightDto, FlightDao flightDao);
-}
+   boolean createFlight(FlightDto flightDto );}

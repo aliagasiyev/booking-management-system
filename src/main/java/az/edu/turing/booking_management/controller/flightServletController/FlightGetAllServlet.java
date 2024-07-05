@@ -6,33 +6,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.util.Optional;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class FlightByIdServlet extends HttpServlet {
+public class FlightGetAllServlet extends HttpServlet {
     private final FlightService flightService;
     private final ObjectMapper objectMapper;
 
-    public FlightByIdServlet(FlightService flightService, ObjectMapper objectMapper) {
+    public FlightGetAllServlet(FlightService flightService, ObjectMapper objectMapper) {
         this.flightService = flightService;
         this.objectMapper = objectMapper;
     }
 
     @Override
+    public void init() {
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
         try {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            long id = Long.parseLong(request.getParameter("id"));
-            Optional<FlightDto> flight = flightService.getFlightById(id);
-            if (flight.isPresent()) {
-                response.getWriter().write(objectMapper.writeValueAsString(flight.get()));
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Flight not found");
-            }
+            List<FlightDto> flights = flightService.getAllFlights();
+
+            String jsonFlights = objectMapper.writeValueAsString(flights);
+            out.println(jsonFlights);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.println("Error retrieving flights: " + e.getMessage());
+        } finally {
+            out.flush();
         }
     }
 }

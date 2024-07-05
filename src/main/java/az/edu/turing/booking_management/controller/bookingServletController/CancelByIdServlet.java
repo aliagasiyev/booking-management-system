@@ -6,7 +6,7 @@ import az.edu.turing.booking_management.dao.impl.BookingPostgresDao;
 import az.edu.turing.booking_management.dao.impl.FlightPostgresDao;
 import az.edu.turing.booking_management.exception.NoSuchReservationException;
 import az.edu.turing.booking_management.service.BookingService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import az.edu.turing.booking_management.service.impl.BookingServiceImpl;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,14 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CancelByIdServlet extends HttpServlet {
-    private  ObjectMapper objectMapper;
-    private  BookingService bookingService;
-
-    public CancelByIdServlet(ObjectMapper objectMapper, BookingService bookingService) {
-        this.objectMapper = objectMapper;
-        this.bookingService = bookingService;
-    }
-
+    private final BookingService bookingService=new BookingServiceImpl();
     public CancelByIdServlet() {
     }
 
@@ -31,11 +24,17 @@ public class CancelByIdServlet extends HttpServlet {
             response.setContentType("application/json");
             BookingDao bookingDao = new BookingPostgresDao();
             FlightDao flightDao = new FlightPostgresDao();
-            long bookingId = Long.parseLong(request.getParameter("bookingId"));
+
+            String bookingIdParam = request.getParameter("bookingId");
+            if (bookingIdParam == null || bookingIdParam.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "{\"message\": \"bookingId parameter is required\"}");
+                return;
+            }
+            long bookingId = Long.parseLong(bookingIdParam);
             boolean cancellingSuccess = bookingService.cancelAReservation(bookingId, bookingDao, flightDao);
             if (cancellingSuccess) {
                 response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                response.getWriter().write("Booking successfully canceled");
+                response.getWriter().write("{\"message\": \"Booking successfully canceled\"}");
             } else {
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
@@ -48,4 +47,3 @@ public class CancelByIdServlet extends HttpServlet {
         }
     }
 }
-

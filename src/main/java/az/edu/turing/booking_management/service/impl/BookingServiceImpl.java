@@ -18,20 +18,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BookingServiceImpl implements BookingService {
-    private BookingDao bookingDao;
-    private FlightDao flightDao;
+    public BookingDao bookingDao;
+    public FlightDao flightDao;
 
     public BookingServiceImpl(BookingDao bookingDao, FlightDao flightDao) {
         this.bookingDao = bookingDao;
         this.flightDao = flightDao;
     }
 
-    public BookingServiceImpl(BookingDao bookingDao) {
-        this.bookingDao = bookingDao;
-    }
 
     public BookingServiceImpl() {
-
     }
 
     @Override
@@ -84,13 +80,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingEntity> getMyReservations(String passengerName) {
+    public List<BookingEntity> getMyReservations(String userName, BookingDao bookingDao) {
         List<BookingEntity> allReservations = bookingDao.getAll();
-        List<BookingEntity> myReservations = allReservations.stream()
-                .filter(booking -> Arrays.asList(booking.getPassengers()).contains(passengerName))
+        System.out.println(userName);
+        return allReservations.stream()
+                .filter(booking -> Arrays.asList(booking.getPassengers()).contains(userName))
                 .collect(Collectors.toList());
-
-        return myReservations;
     }
 }
 

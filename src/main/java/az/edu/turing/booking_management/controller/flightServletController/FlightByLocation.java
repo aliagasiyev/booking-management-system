@@ -11,15 +11,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class FlightByLocation extends HttpServlet {
-    private  FlightService flightService;
-    private  ObjectMapper objectMapper;
+    private final FlightService flightService;
+    private final ObjectMapper objectMapper;
 
     public FlightByLocation(FlightService flightService, ObjectMapper objectMapper) {
         this.flightService = flightService;
         this.objectMapper = objectMapper;
-    }
-
-    public FlightByLocation() {
     }
 
     @Override

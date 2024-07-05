@@ -1,6 +1,7 @@
 package az.edu.turing.booking_management.service.impl;
 
 import az.edu.turing.booking_management.dao.FlightDao;
+import az.edu.turing.booking_management.dao.impl.FlightPostgresDao;
 import az.edu.turing.booking_management.model.dto.FlightDto;
 import az.edu.turing.booking_management.model.entity.FlightEntity;
 import az.edu.turing.booking_management.service.FlightService;
@@ -10,10 +11,13 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class FlightServiceImpl implements FlightService {
-    private final FlightDao flightDao;
+    private  FlightDao flightDao=new FlightPostgresDao();
 
     public FlightServiceImpl(FlightDao flightDao) {
         this.flightDao = flightDao;
+    }
+    public FlightServiceImpl() {
+
     }
     @Override
     public List<FlightDto> getAllFlights() {
@@ -31,16 +35,15 @@ public class FlightServiceImpl implements FlightService {
     }
     @Override
     public List<FlightDto> getAllFlightIn24Hours(String location) {
-        Predicate<FlightEntity> locationAndDatePredicate = (flight ->
-                flight.getLocation().equalsIgnoreCase(location) &&
-                        flight.getDepartureTime().isAfter(LocalDateTime.now()) &&
-                        flight.getDepartureTime().isBefore(LocalDateTime.now().plusHours(24))
-        );
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime twentyFourHoursLater = now.plusHours(24);
         List<FlightEntity> flights = flightDao.getAll();
-        List<FlightEntity> filteredFlights = flights.stream()
-                .filter(locationAndDatePredicate)
-                .collect(Collectors.toList());
-        return filteredFlights.stream()
+
+        return flights.stream()
+                .filter(flight ->
+                        flight.getLocation().equalsIgnoreCase(location) &&
+                                flight.getDepartureTime().isAfter(now) &&
+                                flight.getDepartureTime().isBefore(twentyFourHoursLater))
                 .map(flight -> new FlightDto(
                         flight.getFlightId(),
                         flight.getSeats(),
@@ -49,6 +52,7 @@ public class FlightServiceImpl implements FlightService {
                         flight.getDepartureTime()))
                 .collect(Collectors.toList());
     }
+
     @Override
     public Optional<FlightDto> getFlightById(long flightId) {
         try {

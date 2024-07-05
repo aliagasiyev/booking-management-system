@@ -11,7 +11,7 @@ public interface BookingService {
 
     boolean cancelAReservation(long bookingId, BookingDao bookingDao, FlightDao flightDao);
 
-    List<BookingEntity> getMyReservations(String passengerName);
+    List<BookingEntity> getMyReservations(String userId, BookingDao bookingDao);
 
 
 }
